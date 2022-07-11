@@ -9,10 +9,10 @@ export default {
 </script>
 
 <template>
-  <Transition name="modal" @click="$emit('close')">
+  <Transition name="modal">
     <div v-if="show" class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container">
+      <div class="modal-wrapper" @click="$emit('close')">
+        <div class="modal-container" @click.stop>
           <div class="modal-header">
             <slot name="header">{{ header }}</slot>
           </div>
