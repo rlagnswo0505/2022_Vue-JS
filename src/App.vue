@@ -1,16 +1,27 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <h1>헬로우</h1>
+  <div>{{ hello }}</div>
+  <div>{{ hello }}</div>
+  <div>{{ hello }}</div>
+  <div>{{ hello }}</div>
+  <input type="text" v-model="hello" name="" id="" />
+  <button @click="changeHello">안녕하세요 변경</button>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
-
 export default {
   name: 'App',
-  components: {
-    HelloWorld,
+  data() {
+    return {
+      hello: '안녕',
+    };
   },
+  methods: {
+    changeHello() {
+      this.hello = '안녕하세요';
+    },
+  },
+  components: {},
 };
 </script>
 
@@ -19,8 +30,8 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
+  text-align: center;
   margin-top: 60px;
 }
 </style>
