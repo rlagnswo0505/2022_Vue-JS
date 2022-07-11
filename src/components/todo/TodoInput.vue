@@ -18,7 +18,8 @@ export default {
       // trim 양쪽에 빈값을 지움
       if (this.newTodoItem.trim() !== '') {
         const value = this.newTodoItem;
-        localStorage.setItem(value, value);
+        // emit = 이벤트 발생
+        this.$emit('childAddTodo', value);
       }
       this.newTodoItem = '';
     },
