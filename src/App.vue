@@ -2,7 +2,7 @@
   <TodoHeader></TodoHeader>
   <TodoInput @childAddTodo="addTodo"></TodoInput>
   <TodoList :propsItems="todoItems" @childRemoveTodo="removeTodo"></TodoList>
-  <TodoFooter @childAllRemove="removeAllTodo"></TodoFooter>
+  <TodoFooter @childRemoveAll="removeAllTodo"></TodoFooter>
 </template>
 
 <script>
@@ -15,21 +15,36 @@ export default {
   data() {
     return {
       todoItems: [],
+      cnt: 0,
     };
   },
   methods: {
     addTodo(todoItem) {
-      localStorage.setItem(todoItem, todoItem);
-      this.todoItems.push(todoItem);
+      // if (this.todoItems.includes(todoItem)) {
+      //   alert('같은 todo가 존재합니다');
+      // } else {
+      //   this.todoItems.push(todoItem);
+      // }
+      this.todoItems.push({
+        key: this.cnt++,
+        value: todoItem,
+      });
     },
-    removeTodo(todoItem, index) {
-      // console.log(todoItem, index);
-      localStorage.removeItem(todoItem);
-      this.todoItems.splice(index, 1);
+    removeTodo(key) {
+      // this.todoItems.splice(index, 1);
+      this.todoItems.forEach((item, index) => {
+        if (item.key === key) {
+          this.todoItems.splice(index, 1);
+        }
+      });
     },
     removeAllTodo() {
-      this.todoItems = [];
-      localStorage.clear();
+      this.todoItems.splice(0);
+    },
+    changeValue() {
+      const json = JSON.stringify(this.todoItems);
+      localStorage.setItem('todoItems', json);
+      localStorage.setItem('cnt', this.cnt);
     },
   },
   components: {
@@ -38,12 +53,31 @@ export default {
     TodoList,
     TodoFooter,
   },
+  // todoItems 배열 안에 값이 바뀌면 실행
+  // 배열의 주솟값은 고정이라 deep으로 안에 내용이 바뀌는 지 확인해야함
+  watch: {
+    todoItems: {
+      deep: true,
+      handler() {
+        this.changeValue();
+      },
+    },
+  },
   created() {
-    if (localStorage.length > 0) {
-      for (let i = 0; i < localStorage.length; i++) {
-        this.todoItems.push(localStorage.key(i));
-      }
+    const json = localStorage.getItem('todoItems');
+    if (json) {
+      const todoItems = JSON.parse(json);
+      todoItems.forEach((item) => {
+        this.todoItems.push(item);
+      });
+      const cnt = ~~localStorage.getItem('cnt');
+      this.cnt = cnt;
     }
+    // if (localStorage.length > 0) {
+    //   for (let i = 0; i < localStorage.length; i++) {
+    //     this.todoItems.push(localStorage.key(i));
+    //   }
+    // }
   },
 };
 </script>

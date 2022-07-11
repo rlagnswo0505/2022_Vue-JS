@@ -9,7 +9,7 @@ export default {
   methods: {
     clearTodo() {
       // localStorage.clear();
-      this.$emit('childAllRemove');
+      this.$emit('childRemoveAll');
     },
   },
 };
@@ -26,7 +26,13 @@ export default {
 }
 .clearAllBtn {
   cursor: pointer;
-  color: #e20303;
+  color: tomato;
   display: block;
+  border-radius: 5px;
+  transition: all 0.4s ease-in-out;
+}
+.clearAllBtn:hover {
+  color: #fff;
+  background-color: tomato;
 }
 </style>
