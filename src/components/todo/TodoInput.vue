@@ -18,8 +18,9 @@ export default {
       // trim 양쪽에 빈값을 지움
       if (this.newTodoItem.trim() !== '') {
         const value = this.newTodoItem;
-        // emit = 이벤트 발생
         this.$emit('childAddTodo', value);
+      } else {
+        this.$emit('modalShow');
       }
       this.newTodoItem = '';
     },

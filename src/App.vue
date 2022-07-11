@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <TodoHeader></TodoHeader>
-    <TodoInput @childAddTodo="addTodo"></TodoInput>
+    <TodoInput @childAddTodo="addTodo" @modalShow="showModal"></TodoInput>
     <TodoList :propsItems="todoItems" @childRemoveTodo="removeTodo"></TodoList>
     <TodoFooter @childRemoveAll="removeAllTodo"></TodoFooter>
   </div>
-  <AlertModal :show="modalShow" header="알림창" body="내용을 입력해 주세요."></AlertModal>
+  <AlertModal :show="modalShow" header="알림창" body="내용을 입력해 주세요." @close="closeModal"></AlertModal>
 </template>
 
 <script>
@@ -20,6 +20,7 @@ export default {
     return {
       todoItems: [],
       cnt: 0,
+      modalShow: false,
     };
   },
   methods: {
@@ -28,11 +29,17 @@ export default {
       //   alert('같은 todo가 존재합니다');
       // } else {
       //   this.todoItems.push(todoItem);
-      // }
+      // ]
       this.todoItems.push({
         key: this.cnt++,
         value: todoItem,
       });
+    },
+    showModal() {
+      this.modalShow ? (this.modalShow = false) : (this.modalShow = true);
+    },
+    closeModal() {
+      this.modalShow = false;
     },
     removeTodo(key) {
       // this.todoItems.splice(index, 1);
@@ -42,6 +49,7 @@ export default {
         }
       });
     },
+
     removeAllTodo() {
       this.todoItems.splice(0);
     },

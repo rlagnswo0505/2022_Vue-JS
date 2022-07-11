@@ -9,7 +9,7 @@ export default {
 </script>
 
 <template>
-  <Transition name="modal">
+  <Transition name="modal" @click="$emit('close')">
     <div v-if="show" class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
