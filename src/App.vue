@@ -1,8 +1,11 @@
 <template>
-  <TodoHeader></TodoHeader>
-  <TodoInput @childAddTodo="addTodo"></TodoInput>
-  <TodoList :propsItems="todoItems" @childRemoveTodo="removeTodo"></TodoList>
-  <TodoFooter @childRemoveAll="removeAllTodo"></TodoFooter>
+  <div id="app">
+    <TodoHeader></TodoHeader>
+    <TodoInput @childAddTodo="addTodo"></TodoInput>
+    <TodoList :propsItems="todoItems" @childRemoveTodo="removeTodo"></TodoList>
+    <TodoFooter @childRemoveAll="removeAllTodo"></TodoFooter>
+  </div>
+  <AlertModal :show="modalShow" header="알림창" body="내용을 입력해 주세요."></AlertModal>
 </template>
 
 <script>
@@ -10,6 +13,7 @@ import TodoHeader from './components/todo/TodoHeader.vue';
 import TodoInput from './components/todo/TodoInput.vue';
 import TodoList from './components/todo/TodoList.vue';
 import TodoFooter from './components/todo/TodoFooter.vue';
+import AlertModal from './components/common/AlertModal.vue';
 export default {
   name: 'App',
   data() {
@@ -52,6 +56,7 @@ export default {
     TodoInput,
     TodoList,
     TodoFooter,
+    AlertModal,
   },
   // todoItems 배열 안에 값이 바뀌면 실행
   // 배열의 주솟값은 고정이라 deep으로 안에 내용이 바뀌는 지 확인해야함
