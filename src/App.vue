@@ -14,6 +14,9 @@ import TodoInput from './components/todo/TodoInput.vue';
 import TodoList from './components/todo/TodoList.vue';
 import TodoFooter from './components/todo/TodoFooter.vue';
 import AlertModal from './components/common/AlertModal.vue';
+import axios from 'axios';
+import DateUtils from './utils/DateUtils';
+
 export default {
   name: 'App',
   data() {
@@ -30,9 +33,22 @@ export default {
       // } else {
       //   this.todoItems.push(todoItem);
       // ]
-      this.todoItems.push({
-        key: this.cnt++,
-        value: todoItem,
+      // this.todoItems.push({
+      //   key: this.cnt++,
+      //   value: todoItem,
+      // });
+      const param = {
+        todo: todoItem,
+      };
+      axios.post(`/todo/index`, param).then((res) => {
+        if (res.status === 200 && res.data.result) {
+          const item = {
+            itodo: res.data,
+            todo: todoItem,
+            created_at: DateUtils.getTimestamp(new Date()),
+          };
+          this.todoItems.push(item);
+        }
       });
     },
     showModal() {
@@ -42,16 +58,21 @@ export default {
       this.modalShow = false;
     },
     removeTodo(key) {
-      // this.todoItems.splice(index, 1);
-      this.todoItems.forEach((item, index) => {
-        if (item.key === key) {
-          this.todoItems.splice(index, 1);
+      this.todoItems.forEach((item, idx) => {
+        if (item.itodo === key) {
+          this.todoItems.splice(idx, 1);
+          axios.delete(`/todo/index/${key}`).then((res) => {
+            console.log(res);
+          });
         }
       });
     },
 
     removeAllTodo() {
       this.todoItems.splice(0);
+      axios.delete(`/todo/index`).then((res) => {
+        console.log(res);
+      });
     },
     changeValue() {
       const json = JSON.stringify(this.todoItems);
@@ -77,20 +98,22 @@ export default {
     },
   },
   created() {
-    const json = localStorage.getItem('todoItems');
-    if (json) {
-      const todoItems = JSON.parse(json);
-      todoItems.forEach((item) => {
-        this.todoItems.push(item);
-      });
-      const cnt = ~~localStorage.getItem('cnt');
-      this.cnt = cnt;
-    }
-    // if (localStorage.length > 0) {
-    //   for (let i = 0; i < localStorage.length; i++) {
-    //     this.todoItems.push(localStorage.key(i));
-    //   }
+    // const json = localStorage.getItem('todoItems');
+    // if (json) {
+    //   const todoItems = JSON.parse(json);
+    //   todoItems.forEach((item) => {
+    //     this.todoItems.push(item);
+    //   });
+    //   const cnt = ~~localStorage.getItem('cnt');
+    //   this.cnt = cnt;
     // }
+    axios.get('/todo/index').then((res) => {
+      if (res.status === 200 && res.data.length > 0) {
+        res.data.forEach((item) => {
+          this.todoItems.push(item);
+        });
+      }
+    });
   },
 };
 </script>
